@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barbearia SAAS Moderna - Agende com Estilo!</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+    /* Reset e Box Sizing */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+        font-family: 'Montserrat', sans-serif;
+        background: linear-gradient(135deg, #000000, #0a0a0a);
+        color: #f5f5f5;
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    .container {
+        max-width: 950px;
+        margin: 0 auto;
+        padding: 20px;
+        animation: fadeIn 1s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1, h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-weight: 700;
+        color: #ff0000;
+        letter-spacing: 1px;
+        text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    }
+
+    p.intro {
+        text-align: center;
+        font-style: italic;
+        color: #ccc;
+        margin-bottom: 30px;
+    }
+
+    /* Serviços */
+    .servicos {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+        list-style: none;
+        padding: 0;
+        margin-bottom: 30px;
+    }
+
+    .servico {
+        background: linear-gradient(145deg, #000000, #1a1a1a);
+        padding: 20px;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        border: 1px solid #333;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .servico::before {
+        content: attr(data-emoji);
+        font-size: 2em;
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .servico:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 25px rgba(255, 0, 0, 0.5);
+        background: linear-gradient(145deg, #000000, #ff0000);
+        color: #fff;
+    }
+
+    .servico.selecionado {
+        border: 2px solid #0066ff;
+        box-shadow: 0 0 20px rgba(0, 102, 255, 0.7);
+    }
+
+    .servico-preco {
+        display: block;
+        margin-top: 10px;
+        font-weight: bold;
+        color: #0066ff;
+        font-size: 1.2em;
+    }
+
+    /* Formulário */
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin: 30px 0;
+        background: #1a1a1a;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        border: 1px solid #333;
+    }
+
+    input, select, button {
+        padding: 15px;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-family: inherit;
+        transition: all 0.3s ease;
+    }
+
+    input, select {
+        background: #222;
+        color: #fff;
+        border: 1px solid #444;
+    }
+
+    input:focus, select:focus {
+        outline: none;
+        box-shadow: 0 0 10px #ff0000;
+        border-color: #ff0000;
+    }
+
+    button {
+        background: linear-gradient(45deg, #ff0000, #ff3333);
+        color: #fff;
+        cursor: pointer;
+        font-weight: bold;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid #ff3333;
+    }
+
+    button::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255,255,255,0.3);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.3s, height 0.3s;
+    }
+
+    button:active::after {
+        width: 300px;
+        height: 300px;
+    }
+
+    button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 0, 0, 0.5);
+        background: linear-gradient(45deg, #cc0000, #ff0000);
+    }
+
+    /* Horários */
+    .horarios-disponiveis {
+        background: #1a1a1a;
+        padding: 15px;
+        border-radius: 10px;
+        margin: 10px 0;
+        max-height: 200px;
+        overflow-y: auto;
+        border: 1px solid #333;
+    }
+
+    .horario-opcao {
+        padding: 8px;
+        cursor: pointer;
+        border-radius: 5px;
+        margin: 5px 0;
+        transition: background 0.3s;
+        background: #222;
+        border: 1px solid #444;
+    }
+
+    .horario-opcao:hover {
+        background: #ff0000;
+        color: #fff;
+    }
+
+    /* Dashboard */
+    .agendamentos-lista {
+        margin-top: 40px;
+        background: #1a1a1a;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        border: 1px solid #333;
+    }
+
+    .contador {
+        text-align: center;
+        font-size: 1.1em;
+        color: #ff0000;
+        margin-bottom: 15px;
+        text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+    }
+
+    .filtros {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .filtro-btn {
+        padding: 10px 15px;
+        background: #222;
+        border: 1px solid #444;
+        border-radius: 20px;
+        cursor: pointer;
+        color: #fff;
+        transition: all 0.3s;
+    }
+
+    .filtro-btn.ativo {
+        background: #ff0000;
+        color: #fff;
+        border-color: #ff3333;
+    }
+
+    .agendamento-item {
+        background: #1a1a1a;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        animation: slideIn 0.5s ease;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        border: 1px solid #333;
+    }
+
+    @keyframes slideIn {
+        from { opacity: 0; transform: translateX(-20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+    .cancelar-btn {
+        background: linear-gradient(45deg, #cc0000, #ff0000);
+        color: #fff;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: transform 0.3s;
+        border: 1px solid #ff3333;
+    }
+
+    .cancelar-btn:hover { 
+        transform: scale(1.1); 
+        background: linear-gradient(45deg, #990000, #cc0000);
+    }
+
+    /* Toast */
+    .toast {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 10px;
+        color: #fff;
+        font-weight: bold;
+        z-index: 1000;
+        transform: translateX(400px);
+        transition: transform 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+    .toast.mostrar { transform: translateX(0); }
+    .toast.sucesso { background: linear-gradient(45deg, #0066ff, #3399ff); }
+    .toast.erro { background: linear-gradient(45deg, #ff0000, #ff3333); }
+
+    @media (max-width: 600px) {
+        .servicos { grid-template-columns: 1fr; }
+        form { padding: 15px; }
+        .agendamento-item { flex-direction: column; gap: 10px; text-align: center; }
+        .filtros { justify-content: center; }
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>🪒 Barbearia SAAS Moderna</h1>
+    <p class="intro">Agendamento inteligente, horários disponíveis e dashboard interativo. ✨</p>
+
+    <!-- Serviços -->
+    <section>
+        <h2>Escolha Seu Estilo</h2>
+        <ul class="servicos" id="listaServicos"></ul>
+    </section>
+
+    <!-- Formulário de Agendamento -->
+    <section>
+        <h2>Marque Sua Hora</h2>
+        <form id="formAgendamento">
+            <input type="text" id="nomeCliente" placeholder="Seu Nome Completo" required>
+            <input type="email" id="email" placeholder="Seu Email" required>
+            <input type="tel" id="telefone" placeholder="Seu Telefone (ex: 91999999999)" required>
+            <select id="barbeiroSelecionado" required onchange="carregarHorarios()">
+                <option value="" disabled selected>Escolha o seu Barbeiro</option>
+                <option value="1">João - Especialista em Degradê</option>
+                <option value="2">Pedro - Mestre em Navalhado</option>
+                <option value="3">Carlos - Estilo Clássico</option>
+            </select>
+            <input type="date" id="data" min="" required onchange="carregarHorarios()">
+            <div class="horarios-disponiveis" id="horariosContainer" style="display:none;">
+                <p style="margin-bottom:10px; color:#ff0000;">Horários Disponíveis:</p>
+                <div id="listaHorarios"></div>
+            </div>
+            <input type="hidden" id="hora" required>
+            <input type="hidden" id="servicoSelecionado" value="">
+            <input type="hidden" id="precoSelecionado" value="">
+            <input type="hidden" id="barbeiroId" value="">
+            <button type="submit">Agendar com Estilo! 🚀</button>
+        </form>
+    </section>
+
+    <!-- Dashboard -->
+    <section class="agendamentos-lista">
+        <h2>Dashboard - Seus Agendamentos</h2>
+        <div class="contador" id="contador">Total: 0 agendamentos</div>
+        <div class="filtros">
+            <button class="filtro-btn ativo" onclick="filtrarAgendamentos('todos')">Todos</button>
+            <button class="filtro-btn" onclick="filtrarAgendamentos('confirmado')">Confirmados</button>
+            <button class="filtro-btn" onclick="filtrarAgendamentos('cancelado')">Cancelados</button>
+            <button onclick="exportarLista()" style="background:linear-gradient(45deg,#0066ff,#3399ff);color:#fff;border-radius:20px;padding:10px 15px;border:1px solid #3399ff;">Exportar 📋</button>
+            <button onclick="atualizarListaAgendamentos()" style="background:linear-gradient(45deg,#ff0000,#ff3333);color:#fff;border-radius:20px;padding:10px 15px;border:1px solid #ff3333;">Atualizar 🔄</button>
+        </div>
+        <div id="listaAgendamentos"></div>
+        <button onclick="limparAgendamentos()" style="background:linear-gradient(45deg,#990000,#cc0000);color:#fff;margin-top:20px;width:100%;border:1px solid #cc0000;">Limpar Tudo ⚠️</button>
+    </section>
+</div>
+
+<script>
+    // Lista de serviços com preços
+    const servicos = [
+        { id: 1, nome: "Social", preco: "R$ 20,00", emoji: "💇" },
+        { id: 2, nome: "Degrade", preco: "R$ 25,00", emoji: "✂️" },
+        { id: 3, nome: "Navalhado", preco: "R$ 30,00", emoji: "🪒" },
+        { id: 4, nome: "Tesoura", preco: "R$ 25,00", emoji: "✂️" },
+        { id: 5, nome: "Barba", preco: "R$ 20,00", emoji: "🧔" },
+        { id: 6, nome: "Sobrancelha", preco: "R$ 5,00", emoji: "👁️" },
+        { id: 7, nome: "Freestyle", preco: "R$ 5,00", emoji: "🎨" }
+    ];
+
+    // Inicialização da página
+    document.addEventListener('DOMContentLoaded', function() {
+        // Configurar data mínima como hoje
+        const dataInput = document.getElementById('data');
+        const hoje = new Date().toISOString().split('T')[0];
+        dataInput.min = hoje;
+        dataInput.value = hoje;
+        
+        // Carregar serviços
+        carregarServicos();
+        
+        // Carregar agendamentos
+        atualizarListaAgendamentos();
+    });
+
+    // Carregar serviços na lista
+    function carregarServicos() {
+        const listaServicos = document.getElementById('listaServicos');
+        listaServicos.innerHTML = '';
+        
+        servicos.forEach(servico => {
+            const li = document.createElement('li');
+            li.className = 'servico';
+            li.setAttribute('data-emoji', servico.emoji);
+            li.setAttribute('data-id', servico.id);
+            li.setAttribute('data-preco', servico.preco);
+            li.innerHTML = `
+                <strong>${servico.nome}</strong>
+                <span class="servico-preco">${servico.preco}</span>
+            `;
+            li.addEventListener('click', () => selecionarServico(servico.id));
+            listaServicos.appendChild(li);
+        });
+    }
+
+    // Selecionar serviço
+    function selecionarServico(id) {
+        // Remover seleção anterior
+        document.querySelectorAll('.servico').forEach(s => s.classList.remove('selecionado'));
+        
+        // Adicionar seleção atual
+        const servicoSelecionado = document.querySelector(`.servico[data-id="${id}"]`);
+        servicoSelecionado.classList.add('selecionado');
+        
+        // Atualizar campos ocultos
+        document.getElementById('servicoSelecionado').value = servicos.find(s => s.id === id).nome;
+        document.getElementById('precoSelecionado').value = servicos.find(s => s.id === id).preco;
+        
+        // Mostrar toast de confirmação
+        mostrarToast(`Serviço selecionado: ${servicos.find(s => s.id === id).nome}`, 'sucesso');
+    }
+
+    // Carregar horários disponíveis
+    function carregarHorarios() {
+        const data = document.getElementById('data').value;
+        const barbeiro = document.getElementById('barbeiroSelecionado').value;
+        const container = document.getElementById('horariosContainer');
+        const lista = document.getElementById('listaHorarios');
+        
+        if (!data || !barbeiro) {
+            container.style.display = 'none';
+            return;
+        }
+        
+        // Simular horários disponíveis (em um sistema real, isso viria de uma API)
+        const horarios = [
+            '08:00', '09:00', '10:00', '11:00', 
+            '14:00', '15:00', '16:00', '17:00'
+        ];
+        
+        lista.innerHTML = '';
+        horarios.forEach(horario => {
+            const div = document.createElement('div');
+            div.className = 'horario-opcao';
+            div.textContent = horario;
+            div.addEventListener('click', () => selecionarHorario(horario));
+            lista.appendChild(div);
+        });
+        
+        container.style.display = 'block';
+    }
+
+    // Selecionar horário
+    function selecionarHorario(horario) {
+        document.getElementById('hora').value = horario;
+        
+        // Remover seleção anterior
+        document.querySelectorAll('.horario-opcao').forEach(h => h.style.background = '');
+        
+        // Adicionar seleção atual
+        event.target.style.background = '#ff0000';
+        event.target.style.color = '#fff';
+        
+        mostrarToast(`Horário selecionado: ${horario}`, 'sucesso');
+    }
+
+    // Mostrar toast de notificação
+    function mostrarToast(mensagem, tipo) {
+        const toast = document.createElement('div');
+        toast.className = `toast ${tipo}`;
+        toast.textContent = mensagem;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.classList.add('mostrar');
+        }, 100);
+        
+        setTimeout(() => {
+            toast.classList.remove('mostrar');
+            setTimeout(() => {
+                document.body.removeChild(toast);
+            }, 300);
+        }, 3000);
+    }
+
+    // Enviar formulário de agendamento
+    document.getElementById('formAgendamento').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const nome = document.getElementById('nomeCliente').value;
+        const email = document.getElementById('email').value;
+        const telefone = document.getElementById('telefone').value;
+        const data = document.getElementById('data').value;
+        const hora = document.getElementById('hora').value;
+        const servico = document.getElementById('servicoSelecionado').value;
+        const preco = document.getElementById('precoSelecionado').value;
+        const barbeiro = document.getElementById('barbeiroSelecionado').value;
+        
+        if (!servico) {
+            mostrarToast('Por favor, selecione um serviço', 'erro');
+            return;
+        }
+        
+        if (!hora) {
+            mostrarToast('Por favor, selecione um horário', 'erro');
+            return;
+        }
+        
+        // Simular salvamento (em um sistema real, isso seria uma requisição para um servidor)
+        const agendamento = {
+            id: Date.now(),
+            nome,
+            email,
+            telefone,
+            data,
+            hora,
+            servico,
+            preco,
+            barbeiro,
+            status: 'confirmado',
+            dataCriacao: new Date().toLocaleString()
+        };
+        
+        // Salvar no localStorage
+        const agendamentos = JSON.parse(localStorage.getItem('agendamentos') || '[]');
+        agendamentos.push(agendamento);
+        localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+        
+        // Limpar formulário
+        this.reset();
+        document.getElementById('servicoSelecionado').value = '';
+        document.getElementById('precoSelecionado').value = '';
+        document.getElementById('hora').value = '';
+        document.getElementById('horariosContainer').style.display = 'none';
+        document.querySelectorAll('.servico').forEach(s => s.classList.remove('selecionado'));
+        
+        // Atualizar lista
+        atualizarListaAgendamentos();
+        
+        // Mostrar mensagem de sucesso
+        mostrarToast('Agendamento realizado com sucesso!', 'sucesso');
+    });
+
+    // Atualizar lista de agendamentos
+    function atualizarListaAgendamentos() {
+        const agendamentos = JSON.parse(localStorage.getItem('agendamentos') || '[]');
+        const lista = document.getElementById('listaAgendamentos');
+        const contador = document.getElementById('contador');
+        
+        contador.textContent = `Total: ${agendamentos.length} agendamentos`;
+        
+        if (agendamentos.length === 0) {
+            lista.innerHTML = '<p style="text-align:center;color:#ccc;">Nenhum agendamento encontrado.</p>';
+            return;
+        }
+        
+        lista.innerHTML = '';
+        agendamentos.forEach(agendamento => {
+            const div = document.createElement('div');
+            div.className = 'agendamento-item';
+            div.innerHTML = `
+                <div>
+                    <strong>${agendamento.nome}</strong><br>
+                    ${agendamento.servico} - ${agendamento.preco}<br>
+                    ${agendamento.data} às ${agendamento.hora}<br>
+                    <small>Agendado em: ${agendamento.dataCriacao}</small>
+                </div>
+                <button class="cancelar-btn" onclick="cancelarAgendamento(${agendamento.id})">Cancelar</button>
+            `;
+            lista.appendChild(div);
+        });
+    }
+
+    // Filtrar agendamentos
+    function filtrarAgendamentos(filtro) {
+        // Atualizar botões de filtro
+        document.querySelectorAll('.filtro-btn').forEach(btn => btn.classList.remove('ativo'));
+        event.target.classList.add('ativo');
+        
+        // Em um sistema real, isso filtraria os dados do servidor
+        // Por enquanto, apenas mostra todos
+        atualizarListaAgendamentos();
+    }
+
+    // Cancelar agendamento
+    function cancelarAgendamento(id) {
+        if (confirm('Tem certeza que deseja cancelar este agendamento?')) {
+            const agendamentos = JSON.parse(localStorage.getItem('agendamentos') || '[]');
+            const index = agendamentos.findIndex(a => a.id === id);
+            
+            if (index !== -1) {
+                agendamentos[index].status = 'cancelado';
+                localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+                atualizarListaAgendamentos();
+                mostrarToast('Agendamento cancelado com sucesso!', 'sucesso');
+            }
+        }
+    }
+
+    // Exportar lista de agendamentos
+    function exportarLista() {
+        const agendamentos = JSON.parse(localStorage.getItem('agendamentos') || '[]');
+        
+        if (agendamentos.length === 0) {
+            mostrarToast('Nenhum agendamento para exportar', 'erro');
+            return;
+        }
+        
+        // Simular exportação (em um sistema real, isso geraria um arquivo)
+        let csv = 'Nome,Email,Telefone,Data,Hora,Serviço,Preço,Status\n';
+        agendamentos.forEach(a => {
+            csv += `"${a.nome}","${a.email}","${a.telefone}","${a.data}","${a.hora}","${a.servico}","${a.preco}","${a.status}"\n`;
+        });
+        
+        // Criar e baixar arquivo
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'agendamentos_barbearia.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        mostrarToast('Lista exportada com sucesso!', 'sucesso');
+    }
+
+    // Limpar todos os agendamentos
+    function limparAgendamentos() {
+        if (confirm('Tem certeza que deseja limpar TODOS os agendamentos? Esta ação não pode ser desfeita.')) {
+            localStorage.removeItem('agendamentos');
+            atualizarListaAgendamentos();
+            mostrarToast('Todos os agendamentos foram removidos', 'sucesso');
+        }
+    }
+</script>
+</body>
+</html>

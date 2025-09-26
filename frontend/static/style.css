@@ -1,0 +1,63 @@
+/* Reset e Box Sizing */
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1e40af;
+    --secondary: #22c55e;
+    --dark: #0f172a;
+    --light: #f1f5f9;
+    --success: #22c55e;
+    --gray: #64748b;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, var(--dark), #1e293b);
+    color: #f5f5f5;
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+h1, h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 700;
+    color: var(--primary);  /* 🎨 ATUALIZADO */
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px rgba(37, 99, 235, 0.3);  /* 🎨 ATUALIZADO */
+}
+
+/* Botões principais */
+button {
+    background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    position: relative;
+    overflow: hidden;
+    border: none;
+}
+
+button:hover {
+    background: linear-gradient(45deg, var(--primary-dark), var(--primary));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);  /* 🎨 ATUALIZADO */
+}
+
+/* Serviços selecionados */
+.servico.selecionado {
+    border: 2px solid var(--primary);  /* 🎨 ATUALIZADO */
+    box-shadow: 0 0 25px rgba(37, 99, 235, 0.6);  /* 🎨 ATUALIZADO */
+    background: linear-gradient(145deg, var(--primary), var(--primary-dark));
+}
+
+/* Toast de sucesso */
+.toast.sucesso {
+    background: linear-gradient(45deg, var(--success), #22c55e);
+}
