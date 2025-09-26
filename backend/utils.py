@@ -1,4 +1,3 @@
-# utils.py
 import random
 import string
 from datetime import datetime, timedelta
@@ -108,21 +107,11 @@ def calcular_tempo_restante_trial(barbearia):
 def validar_telefone(telefone):
     """Valida número de telefone brasileiro"""
     import re
-    
-    # Remove caracteres não numéricos
     telefone_limpo = re.sub(r'\D', '', telefone)
-    
-    # Valida números brasileiros (11 dígitos com DDD)
-    if len(telefone_limpo) == 11 and telefone_limpo.startswith('55'):
-        return True
-    elif len(telefone_limpo) == 10:  # Sem código do país
-        return True
-    else:
-        return False
+    return len(telefone_limpo) in [10, 11]
 
 def validar_horario(horario):
     """Valida formato de horário HH:MM"""
     import re
-    
     padrao = r'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$'
     return bool(re.match(padrao, horario))
