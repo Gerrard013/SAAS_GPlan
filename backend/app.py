@@ -143,6 +143,8 @@ def criar_dados_iniciais():
 
 # -------------------- CONFIGURAÇÃO HOST --------------------
 
+# -------------------- CONFIGURAÇÃO HOST --------------------
+
 if __name__ == '__main__':
     logger.info("🚀 Iniciando GPlan - Sistema de Gestão para Barbearias")
     
@@ -150,8 +152,13 @@ if __name__ == '__main__':
         criar_dados_iniciais()
     
     logger.info("✅ Dados iniciais criados com sucesso!")
-    logger.info("🌐 Servidor iniciando em http://0.0.0.0:5000")
-    logger.info("🔧 Health Check: http://localhost:5000/health")
-    logger.info("📊 API Info: http://localhost:5000/api/info")
     
-    app.run(debug=True, host='0.0.0.0', port=5000, threaded=True)
+    # ✅ CORREÇÃO: Usar porta do ambiente (Railway fornece via variável)
+    port = int(os.environ.get('PORT', 5000))
+    host = os.environ.get('HOST', '0.0.0.0')
+    
+    logger.info(f"🌐 Servidor iniciando em http://{host}:{port}")
+    logger.info(f"🔧 Health Check: http://{host}:{port}/health")
+    
+    # ✅ CORREÇÃO: debug=False em produção
+    app.run(host=host, port=port, debug=False, threaded=True)
